@@ -15,9 +15,7 @@ Installation
 ------------
 Option #1: Clone the repository and add it as an Android library project to your
 application. You will also need to install the NDK and run `ndk-build`
-from the project root directory, in order to build the `.so` file. A future
-version of this project will (hopefully) have better packaging &mdash;
-in the interim, your patience is appreciated.
+from the project root directory, in order to build the `.so` file.
 
 Option #2: UnZIP the ZIP file found in the Downloads area of this site into
 the `libs/` directory of your project. This only works for ARM targets, and

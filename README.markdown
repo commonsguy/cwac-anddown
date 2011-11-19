@@ -11,14 +11,20 @@ C library, parsing speeds are nice and fast -- 5K of input can be
 converted into HTML in about 1 millisecond. Also, sundown is a fairly
 popular Markdown processor and is the brains behind GitHub-flavored Markdown.
 
-Usage
------
-Clone the repository and add it as an Android library project to your
+Installation
+------------
+Option #1: Clone the repository and add it as an Android library project to your
 application. You will also need to install the NDK and run `ndk-build`
 from the project root directory, in order to build the `.so` file. A future
 version of this project will (hopefully) have better packaging &mdash;
 in the interim, your patience is appreciated.
 
+Option #2: UnZIP the ZIP file found in the Downloads area of this site into
+the `libs/` directory of your project. This only works for ARM targets, and
+this has been *very* lightly tested.
+
+Usage
+-----
 Create an instance of `com.commonsware.cwac.anddown.AndDown`, then call
 `markdownToHtml()` on it, supplying
 a `String` containing your Markdown source. This method returns a `String`

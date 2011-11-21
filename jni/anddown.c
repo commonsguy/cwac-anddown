@@ -25,20 +25,20 @@ JNIEXPORT jstring JNICALL Java_com_commonsware_cwac_anddown_AndDown_markdownToHt
   (JNIEnv *env, jobject o, jstring raw) {
 	struct buf *ib, *ob;
 	int ret;
-  jstring result;
+	jstring result;
 
 	struct sd_callbacks callbacks;
 	struct html_renderopt options;
 	struct sd_markdown *markdown;
 
-  const char* str;
-  str = (*env)->GetStringUTFChars(env, raw, NULL);
+	const char* str;
+	str = (*env)->GetStringUTFChars(env, raw, NULL);
 
 	ib = bufnew(INPUT_UNIT);
-  bufputs(ib, str);
+	bufputs(ib, str);
 	ob = bufnew(OUTPUT_UNIT);
 
-  (*env)->ReleaseStringUTFChars(env, raw, str);
+	(*env)->ReleaseStringUTFChars(env, raw, str);
 
 	sdhtml_renderer(&callbacks, &options, 0);
 	markdown = sd_markdown_new(0, 16, &callbacks, &options);
@@ -46,12 +46,12 @@ JNIEXPORT jstring JNICALL Java_com_commonsware_cwac_anddown_AndDown_markdownToHt
 	sd_markdown_render(ob, ib->data, ib->size, markdown);
 	sd_markdown_free(markdown);
 
-  result=(*env)->NewStringUTF(env, bufcstr(ob));
+	result=(*env)->NewStringUTF(env, bufcstr(ob));
 
 	/* cleanup */
 	bufrelease(ib);
 	bufrelease(ob);
 
-  return(result);
+	return(result);
 }
 

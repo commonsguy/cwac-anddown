@@ -94,6 +94,11 @@ on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with `commonsw
 what CWAC module you are having issues with, and be sure to include source code 
 and stack traces if you are encountering crashes.
 
+If you have encountered what is clearly a bug, please post an [issue](https://github.com/commonsguy/cwac-anddown/issues). Be certain to include complete steps
+for reproducing the issue.
+
+Do not ask for help via Twitter.
+
 Release Notes
 -------------
 v0.1.0: initial release

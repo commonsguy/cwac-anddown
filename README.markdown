@@ -101,6 +101,7 @@ Do not ask for help via Twitter.
 
 Release Notes
 -------------
+v0.1.1: added `Application.mk` to support both x86 and ARM
 v0.1.0: initial release
 
 Who Made This?

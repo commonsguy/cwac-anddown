@@ -58,6 +58,9 @@ Dependencies
 This project has no dependencies. This repository includes a copy of the
 relevant files from the sundown project.
 
+This project should work on API Level 7 and higher &mdash; please report
+bugs if you find otherwise.
+
 Version
 -------
 This is version v0.1 of this module, which means it is really new. Moreover,

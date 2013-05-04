@@ -1,6 +1,10 @@
 CWAC AndDown: Markdown. Android. Perfect Together.
 ==================================================
 
+**Work on this project has been suspended, partly because sundown is fading away, and partly because
+[Bypass](https://github.com/Uncodin/bypass/blob/master/platform/android/README.md)
+is probably a superior solution at the present time.**
+
 Markdown is a popular markup language for wikitext and the like.
 While there are Java-based Markdown processors available, these are
 likely to be slow on Android, where they run at all.

@@ -43,7 +43,7 @@ URL.
 
 The AAR artifact contains compiled binaries for ARM,
 ARM-v7a, and x86, so you do not need your own copy of the NDK, unless
-you need a MIPS edition.s
+you need a MIPS edition.
 
 Usage
 -----

@@ -68,16 +68,6 @@ task packageNativeLibs_x86(type: Jar) {
     destinationDir(file('libs/'))
 }
 
-task packageNativeLibs_MIPS(type: Jar) {
-    baseName 'libtestlib'
-    classifier 'mips'
-    from(file('libs/mips/')) {
-        include '**/*.so'
-    }
-    into('lib/mips')
-    destinationDir(file('libs/'))
-}
-
 task packageNativeLibs(description: "package native libraries") {
 
 }
@@ -85,7 +75,6 @@ task packageNativeLibs(description: "package native libraries") {
 packageNativeLibs.dependsOn 'packageNativeLibs_ARM'
 packageNativeLibs.dependsOn 'packageNativeLibs_ARMv7'
 packageNativeLibs.dependsOn 'packageNativeLibs_x86'
-packageNativeLibs.dependsOn 'packageNativeLibs_MIPS'
 
 task ndkBuild(type: Exec, description: "Task to run ndk-build") {
     commandLine "${System.env.NDK_HOME}/ndk-build"

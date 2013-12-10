@@ -1,6 +1,10 @@
 CWAC AndDown: Markdown. Android. Perfect Together.
 ==================================================
 
+**Work on this project has been suspended, partly because sundown is fading away, and partly because
+[Bypass](https://github.com/Uncodin/bypass/blob/master/platform/android/README.md)
+is probably a superior solution at the present time.**
+
 Markdown is a popular markup language for wikitext and the like.
 While there are Java-based Markdown processors available, these are
 likely to be slow on Android, where they run at all.
@@ -17,8 +21,8 @@ Option #1: Clone the repository and add it as an Android library project to your
 application. You will also need to install the NDK and run `ndk-build`
 from the project root directory, in order to build the `.so` file.
 
-Option #2: UnZIP the ZIP file found in the Downloads area of this site into
-the `libs/` directory of your project. This only works for ARM targets, and
+Option #2: UnZIP [the ZIP file](https://github.com/commonsguy/downloads) into
+the `libs/` directory of your project. This only works for ARM and x86 targets, and
 this has been *very* lightly tested.
 
 Usage
@@ -57,6 +61,9 @@ Dependencies
 ------------
 This project has no dependencies. This repository includes a copy of the
 relevant files from the sundown project.
+
+This project should work on API Level 7 and higher &mdash; please report
+bugs if you find otherwise.
 
 Version
 -------

@@ -1,29 +1,49 @@
 CWAC AndDown: Markdown. Android. Perfect Together.
 ==================================================
 
-**Work on this project has been suspended, partly because sundown is fading away, and partly because
-[Bypass](https://github.com/Uncodin/bypass/blob/master/platform/android/README.md)
-is probably a superior solution at the present time.**
-
 Markdown is a popular markup language for wikitext and the like.
 While there are Java-based Markdown processors available, these are
 likely to be slow on Android, where they run at all.
 
-This project offers an Android-compliant wrapper around [sundown](https://github.com/tanoku/sundown),
+This project offers an Android-compliant wrapper around [hoedown](https://github.com/hoedown/hoedown),
 a C-based Markdown parser and HTML generator. By using the NDK with this
 C library, parsing speeds are nice and fast -- 5K of input can be
-converted into HTML in about 1 millisecond. Also, sundown is a fairly
-popular Markdown processor and is the brains behind GitHub-flavored Markdown.
+converted into HTML in about 1 millisecond.
+
+If your objective is to put the results of Markdown in a `TextView`, or something
+else in Android that understands `Spanned` objects, you are perhaps better served
+using [Bypass](https://github.com/Uncodin/bypass/blob/master/platform/android/README.md).
+That project goes straight from Markdown to a `Spanned`, bypassing HTML. However,
+if you are looking to convert Markdown to HTML to display in a `WebView`, or have
+other reasons to, um, bypass Bypass, then AndDown may be of use to you.
 
 Installation
 ------------
-Option #1: Clone the repository and add it as an Android library project to your
+Option #1: Clone the repository and add the `anddown/` subdirectory as an Android library project to your
 application. You will also need to install the NDK and run `ndk-build`
 from the project root directory, in order to build the `.so` file.
 
-Option #2: UnZIP [the ZIP file](https://github.com/commonsguy/downloads) into
-the `libs/` directory of your project. This only works for ARM and x86 targets, and
-this has been *very* lightly tested.
+Option #2: Use the AAR artifact for use with Gradle. To use that, add the following
+blocks to your `build.gradle` file:
+
+```groovy
+repositories {
+    maven {
+        url "https://repo.commonsware.com.s3.amazonaws.com"
+    }
+}
+
+dependencies {
+    compile 'com.commonsware.cwac:anddown:0.2.0'
+}
+```
+
+Or, if you cannot use SSL, use `http://repo.commonsware.com` for the repository
+URL.
+
+The AAR artifact contains compiled binaries for ARM,
+ARM-v7a, and x86, so you do not need your own copy of the NDK, unless
+you need a MIPS edition.s
 
 Usage
 -----
@@ -49,9 +69,9 @@ This should only be an issue if you are displaing the Markdown-generated
 HTML in a `TextView` &mdash; `WebView` in particular should behave more
 normally.
 
-Also, while sundown is very fast, using the resulting HTML will inevitably
-be slower. The same 5K sample file that sundown processes in about 1
-millisecond takes a few hundred milliseconds to convert into a `SpannedString`
+Also, while hoedown is very fast, using the resulting HTML will inevitably
+be slower. The same 5K sample file that hoedown processes in about 1
+millisecond takes a 100+ milliseconds to convert into a `SpannedString`
 via `Html.fromHtml()`.
 
 The author of this project is a complete klutz when it comes to C/JNI/NDK
@@ -60,30 +80,22 @@ development. You have been warned.
 Dependencies
 ------------
 This project has no dependencies. This repository includes a copy of the
-relevant files from the sundown project.
+relevant files from the hoedown project.
 
 This project should work on API Level 7 and higher &mdash; please report
 bugs if you find otherwise.
 
 Version
 -------
-This is version v0.1 of this module, which means it is really new. Moreover,
-it is the first CWAC project incorporating the NDK, so there may be new
-and exiciting issues as a result.
+This is version v0.2.0 of this module, which means it is...
+well... it is what it is.
 
 Demo
 ----
 In the `demo/` sub-project you will find
 a sample activity that demonstrates the use of `AndDown`, loading the
-sundown README out of a raw resource and displaying it in a `TextView`
+hoedown README out of a raw resource and displaying it in a `TextView`
 wrapped in a `ScrollView`.
-
-Future
-------
-Future editions of this project will add things like:
-
- - a custom sundown renderer that generates a `SpannedString` directly, bypassing HTML
- - code to convert a `SpannedString` back into Markdown source
 
 License
 -------
@@ -91,7 +103,7 @@ The code in this project is licensed under the Apache
 Software License 2.0, per the terms of the included LICENSE
 file.
 
-The sundown source code is available under [its own license](https://github.com/tanoku/sundown),
+The hoedown source code is available under [its own license](https://github.com/hoedown/hoedown/blob/master/LICENSE),
 which appears to be a modified BSD license.
 
 Questions
@@ -108,8 +120,9 @@ Do not ask for help via Twitter.
 
 Release Notes
 -------------
-v0.1.1: added `Application.mk` to support both x86 and ARM
-v0.1.0: initial release
+- v0.2.0: migrated to hoedown and Gradle
+- v0.1.1: added `Application.mk` to support both x86 and ARM
+- v0.1.0: initial release
 
 Who Made This?
 --------------

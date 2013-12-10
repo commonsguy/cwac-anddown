@@ -23,34 +23,31 @@
 
 JNIEXPORT jstring JNICALL Java_com_commonsware_cwac_anddown_AndDown_markdownToHtml
   (JNIEnv *env, jobject o, jstring raw) {
-  struct buf *ib, *ob;
-  int ret;
+  struct hoedown_buffer *ib, *ob;
   jstring result;
-
-  struct sd_callbacks callbacks;
-  struct html_renderopt options;
-  struct sd_markdown *markdown;
-
+  hoedown_renderer *renderer;
+  hoedown_markdown *markdown;
   const char* str;
+
   str = (*env)->GetStringUTFChars(env, raw, NULL);
 
-  ib = bufnew(INPUT_UNIT);
-  bufputs(ib, str);
-  ob = bufnew(OUTPUT_UNIT);
+  ib = hoedown_buffer_new(INPUT_UNIT);
+  hoedown_buffer_puts(ib, str);
+  ob = hoedown_buffer_new(OUTPUT_UNIT);
 
   (*env)->ReleaseStringUTFChars(env, raw, str);
 
-  sdhtml_renderer(&callbacks, &options, 0);
-  markdown = sd_markdown_new(0, 16, &callbacks, &options);
+  renderer = hoedown_html_renderer_new(0, 0);
+  markdown = hoedown_markdown_new(0, 16, renderer);
 
-  sd_markdown_render(ob, ib->data, ib->size, markdown);
-  sd_markdown_free(markdown);
+  hoedown_markdown_render(ob, ib->data, ib->size, markdown);
+  hoedown_markdown_free(markdown);
 
-  result=(*env)->NewStringUTF(env, bufcstr(ob));
+  result=(*env)->NewStringUTF(env, hoedown_buffer_cstr(ob));
 
   /* cleanup */
-  bufrelease(ib);
-  bufrelease(ob);
+  hoedown_buffer_free(ib);
+  hoedown_buffer_free(ob);
 
   return(result);
 }

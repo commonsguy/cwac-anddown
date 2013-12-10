@@ -1,21 +1,31 @@
-#ifndef __CR_STACK_H__
-#define __CR_STACK_H__
+/* stack.h - simple stacking */
+
+#ifndef HOEDOWN_STACK_H
+#define HOEDOWN_STACK_H
 
 #include <stdlib.h>
 
-struct stack {
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct hoedown_stack {
 	void **item;
 	size_t size;
 	size_t asize;
 };
 
-void stack_free(struct stack *);
-int stack_grow(struct stack *, size_t);
-int stack_init(struct stack *, size_t);
+typedef struct hoedown_stack hoedown_stack;
 
-int stack_push(struct stack *, void *);
+int hoedown_stack_new(hoedown_stack *, size_t);
+void hoedown_stack_free(hoedown_stack *);
+int hoedown_stack_grow(hoedown_stack *, size_t);
+int hoedown_stack_push(hoedown_stack *, void *);
+void *hoedown_stack_pop(hoedown_stack *);
+void *hoedown_stack_top(hoedown_stack *);
 
-void *stack_pop(struct stack *);
-void *stack_top(struct stack *);
-
+#ifdef __cplusplus
+}
 #endif
+
+#endif /** HOEDOWN_STACK_H **/

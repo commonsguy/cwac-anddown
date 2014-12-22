@@ -1,13 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
-    }
-}
-
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     maven {
@@ -16,12 +7,13 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:anddown:0.2.0'
+    debugCompile project(':anddown')
+    releaseCompile 'com.commonsware.cwac:anddown:0.2.+'
 }
 
 android {
     compileSdkVersion 7
-    buildToolsVersion "18.1.0"
+    buildToolsVersion "19.1.0"
 
     sourceSets {
         main {

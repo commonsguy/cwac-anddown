@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:anddown:0.2.0'
+    compile 'com.commonsware.cwac:anddown:0.2.+'
 }
 ```
 
@@ -87,7 +87,7 @@ bugs if you find otherwise.
 
 Version
 -------
-This is version v0.2.0 of this module, which means it is...
+This is version v0.2.2 of this module, which means it is...
 well... it is what it is.
 
 Demo
@@ -109,7 +109,8 @@ which appears to be a modified BSD license.
 Questions
 ---------
 If you have questions regarding the use of this code, please post a question
-on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with `commonsware` and `android`. Be sure to indicate
+on [StackOverflow](http://stackoverflow.com/questions/ask) tagged with
+`commonsware-cwac` and `android` after [searching to see if there already is an answer](https://stackoverflow.com/search?q=[commonsware-cwac]+anddown). Be sure to indicate
 what CWAC module you are having issues with, and be sure to include source code 
 and stack traces if you are encountering crashes.
 
@@ -120,6 +121,8 @@ Do not ask for help via Twitter.
 
 Release Notes
 -------------
+- v0.2.2: updated for Android Studio 1.0 and new AAR publishing system
+- v0.2.1: updated Gradle, fixed manifest for merging
 - v0.2.0: migrated to hoedown and Gradle
 - v0.1.1: added `Application.mk` to support both x86 and ARM
 - v0.1.0: initial release

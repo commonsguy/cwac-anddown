@@ -12,36 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-#LOCAL_PATH := $(call my-dir)
-
-#include $(CLEAR_VARS)
-
-#LOCAL_MODULE    := anddown
-#LOCAL_SRC_FILES := anddown.c autolink.c buffer.c escape.c html.c html_blocks.c html_smartypants.c markdown.c stack.c
-# LOCAL_C_INCLUDES := 
-
-#include $(BUILD_SHARED_LIBRARY)
-
 LOCAL_PATH := $(call my-dir)
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := anddown
 LOCAL_SRC_FILES := \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/autolink.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/Android.mk \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/Application.mk \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/html_blocks.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/html.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/buffer.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/stack.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/html_smartypants.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/markdown.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/escape.c \
-	/home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni/anddown.c \
+	anddown.c \
+	src/autolink.c \
+	src/buffer.c \
+	src/escape.c \
+	src/html.c \
+	src/html_blocks.c \
+	src/html_smartypants.c \
+	src/markdown.c \
+	src/stack.c \
 
-LOCAL_C_INCLUDES += /home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/jni
-LOCAL_C_INCLUDES += /home/mmurphy/stuff/CommonsWare/projects/CWAC/AndDown/anddown/build-types/release/jni
+LOCAL_C_INCLUDES := jni/src
 
 include $(BUILD_SHARED_LIBRARY)
+
+#src/html_blocks.h: html_block_names.txt
+#	gperf -N find_block_tag -H hash_block_tag -C -c -E --ignore-case $^ > $@
+
 

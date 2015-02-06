@@ -41,7 +41,7 @@ static size_t (*smartypants_cb_ptrs[])
 	smartypants_cb__escape, /* 10 */
 };
 
-static const uint8_t smartypants_cb_chars[] = {
+static const uint8_t smartypants_cb_chars[UINT8_MAX+1] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 4, 0, 0, 0, 5, 3, 2, 0, 0, 0, 0, 1, 6, 0,
@@ -60,7 +60,7 @@ static const uint8_t smartypants_cb_chars[] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-static inline int
+static int
 word_boundary(uint8_t c)
 {
 	return c == 0 || isspace(c) || ispunct(c);
@@ -211,7 +211,7 @@ smartypants_cb__dash(hoedown_buffer *ob, struct smartypants_data *smrt, uint8_t 
 static size_t
 smartypants_cb__amp(hoedown_buffer *ob, struct smartypants_data *smrt, uint8_t previous_char, const uint8_t *text, size_t size)
 {
-	int len;
+	size_t len;
 	if (size >= 6 && memcmp(text, "&quot;", 6) == 0) {
 		if (smartypants_quotes(ob, previous_char, size >= 7 ? text[6] : 0, 'd', &smrt->in_dquote))
 			return 5;

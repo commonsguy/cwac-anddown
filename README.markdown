@@ -87,7 +87,7 @@ bugs if you find otherwise.
 
 Version
 -------
-This is version v0.2.2 of this module, which means it is...
+This is version v0.2.3 of this module, which means it is...
 well... it is what it is.
 
 Demo
@@ -121,6 +121,7 @@ Do not ask for help via Twitter.
 
 Release Notes
 -------------
+- v0.2.3: better `Android.mk`, updated to `hoedown` 3.0.1
 - v0.2.2: updated for Android Studio 1.0 and new AAR publishing system
 - v0.2.1: updated Gradle, fixed manifest for merging
 - v0.2.0: migrated to hoedown and Gradle

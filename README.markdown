@@ -116,6 +116,9 @@ and stack traces if you are encountering crashes.
 
 If you have encountered what is clearly a bug, please post an [issue](https://github.com/commonsguy/cwac-anddown/issues). Be certain to include complete steps
 for reproducing the issue.
+The [contribution guidelines](CONTRIBUTING.md)
+provide some suggestions for how to create a bug report that will get
+the problem fixed the fastest.
 
 Do not ask for help via Twitter.
 

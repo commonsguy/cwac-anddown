@@ -97,6 +97,12 @@ a sample activity that demonstrates the use of `AndDown`, loading the
 hoedown README out of a raw resource and displaying it in a `TextView`
 wrapped in a `ScrollView`.
 
+Additional Documentation
+------------------------
+[The Busy Coder's Guide to Android Development](https://commonsware.com/Android)
+contains a chapter on the NDK that includes coverage of
+this library.
+
 License
 -------
 The code in this project is licensed under the Apache

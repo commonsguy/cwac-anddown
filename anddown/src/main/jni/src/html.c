@@ -612,6 +612,8 @@ toc_finalize(hoedown_buffer *ob, int inline_render, const hoedown_renderer_data 
 		HOEDOWN_BUFPUTSL(ob, "</li>\n</ul>\n");
 		state->toc_data.current_level--;
 	}
+
+	state->toc_data.header_count = 0;
 }
 
 hoedown_renderer *

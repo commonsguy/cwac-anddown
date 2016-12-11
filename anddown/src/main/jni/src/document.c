@@ -77,6 +77,7 @@ static size_t char_autolink_url(hoedown_buffer *ob, hoedown_document *doc, uint8
 static size_t char_autolink_email(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offset, size_t size);
 static size_t char_autolink_www(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offset, size_t size);
 static size_t char_link(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offset, size_t size);
+static size_t char_image(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offset, size_t size);
 static size_t char_superscript(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offset, size_t size);
 static size_t char_math(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offset, size_t size);
 
@@ -86,6 +87,7 @@ enum markdown_char_t {
 	MD_CHAR_CODESPAN,
 	MD_CHAR_LINEBREAK,
 	MD_CHAR_LINK,
+	MD_CHAR_IMAGE,
 	MD_CHAR_LANGLE,
 	MD_CHAR_ESCAPE,
 	MD_CHAR_ENTITY,
@@ -103,6 +105,7 @@ static char_trigger markdown_char_ptrs[] = {
 	&char_codespan,
 	&char_linebreak,
 	&char_link,
+	&char_image,
 	&char_langle_tag,
 	&char_escape,
 	&char_entity,
@@ -402,9 +405,23 @@ tag_length(uint8_t *data, size_t size, hoedown_autolink_type *autolink)
 	/* a valid tag can't be shorter than 3 chars */
 	if (size < 3) return 0;
 
-	/* begins with a '<' optionally followed by '/', followed by letter or number */
 	if (data[0] != '<') return 0;
-	i = (data[1] == '/') ? 2 : 1;
+
+        /* HTML comment, laxist form */
+        if (size > 5 && data[1] == '!' && data[2] == '-' && data[3] == '-') {
+		i = 5;
+
+		while (i < size && !(data[i - 2] == '-' && data[i - 1] == '-' && data[i] == '>'))
+			i++;
+
+		i++;
+
+		if (i <= size)
+			return i;
+        }
+
+	/* begins with a '<' optionally followed by '/', followed by letter or number */
+        i = (data[1] == '/') ? 2 : 1;
 
 	if (!isalnum(data[i]))
 		return 0;
@@ -459,7 +476,7 @@ tag_length(uint8_t *data, size_t size, hoedown_autolink_type *autolink)
 static void
 parse_inline(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t size)
 {
-	size_t i = 0, end = 0;
+	size_t i = 0, end = 0, consumed = 0;
 	hoedown_buffer work = { 0, 0, 0, 0, NULL, NULL, NULL };
 	uint8_t *active_char = doc->active_char;
 
@@ -483,12 +500,13 @@ parse_inline(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t si
 		if (end >= size) break;
 		i = end;
 
-		end = markdown_char_ptrs[ (int)active_char[data[end]] ](ob, doc, data + i, i, size - i);
+		end = markdown_char_ptrs[ (int)active_char[data[end]] ](ob, doc, data + i, i - consumed, size - i);
 		if (!end) /* no action from the callback */
 			end = i + 1;
 		else {
 			i += end;
 			end = i;
+			consumed = i;
 		}
 	}
 }
@@ -548,7 +566,7 @@ find_emph_char(uint8_t *data, size_t size, uint8_t c)
 			}
 
 			/* not a well-formed codespan; use found matching emph char */
-			if (i >= size) return tmp_i;
+			if (bt < span_nb && i >= size) return tmp_i;
 		}
 		/* skipping a link */
 		else if (data[i] == '[') {
@@ -927,7 +945,12 @@ char_escape(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t off
 		}
 		else hoedown_buffer_putc(ob, data[1]);
 	} else if (size == 1) {
-		hoedown_buffer_putc(ob, data[0]);
+		if (doc->md.normal_text) {
+			work.data = data;
+			work.size = 1;
+			doc->md.normal_text(ob, &work, &doc->data);
+		}
+		else hoedown_buffer_putc(ob, data[0]);
 	}
 
 	return 2;
@@ -1007,7 +1030,11 @@ char_autolink_www(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size
 		HOEDOWN_BUFPUTSL(link_url, "http://");
 		hoedown_buffer_put(link_url, link->data, link->size);
 
-		ob->size -= rewind;
+		if (ob->size > rewind)
+			ob->size -= rewind;
+		else
+			ob->size = 0;
+
 		if (doc->md.normal_text) {
 			link_text = newbuf(doc, BUFFER_SPAN);
 			doc->md.normal_text(link_text, link, &doc->data);
@@ -1035,7 +1062,11 @@ char_autolink_email(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, si
 	link = newbuf(doc, BUFFER_SPAN);
 
 	if ((link_len = hoedown_autolink__email(&rewind, link, data, offset, size, 0)) > 0) {
-		ob->size -= rewind;
+		if (ob->size > rewind)
+			ob->size -= rewind;
+		else
+			ob->size = 0;
+
 		doc->md.autolink(ob, link, HOEDOWN_AUTOLINK_EMAIL, &doc->data);
 	}
 
@@ -1055,12 +1086,27 @@ char_autolink_url(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size
 	link = newbuf(doc, BUFFER_SPAN);
 
 	if ((link_len = hoedown_autolink__url(&rewind, link, data, offset, size, 0)) > 0) {
-		ob->size -= rewind;
+		if (ob->size > rewind)
+			ob->size -= rewind;
+		else
+			ob->size = 0;
+
 		doc->md.autolink(ob, link, HOEDOWN_AUTOLINK_NORMAL, &doc->data);
 	}
 
 	popbuf(doc, BUFFER_SPAN);
 	return link_len;
+}
+
+static size_t
+char_image(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offset, size_t size) {
+	size_t ret;
+
+	if (size < 2 || data[1] != '[') return 0;
+
+	ret = char_link(ob, doc, data + 1, offset + 1, size - 1);
+	if (!ret) return 0;
+	return ret + 1;
 }
 
 /* char_link • '[': parsing a link, a footnote or an image */
@@ -1186,8 +1232,10 @@ char_link(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offse
 			link_e--;
 
 		/* remove optional angle brackets around the link */
-		if (data[link_b] == '<') link_b++;
-		if (data[link_e - 1] == '>') link_e--;
+		if (data[link_b] == '<' && data[link_e - 1] == '>') {
+			link_b++;
+			link_e--;
+		}
 
 		/* building escaped link and title */
 		if (link_e > link_b) {
@@ -1273,9 +1321,6 @@ char_link(hoedown_buffer *ob, hoedown_document *doc, uint8_t *data, size_t offse
 
 	/* calling the relevant rendering function */
 	if (is_img) {
-		if (ob->size && ob->data[ob->size - 1] == '!')
-			ob->size -= 1;
-
 		ret = doc->md.image(ob, u_link, title, content, &doc->data);
 	} else {
 		ret = doc->md.link(ob, content, u_link, title, &doc->data);
@@ -2224,7 +2269,15 @@ parse_table_row(
 		cell_start = i;
 
 		len = find_emph_char(data + i, size - i, '|');
-		i += len ? len : size - i;
+
+		/* Two possibilities for len == 0:
+		   1) No more pipe char found in the current line.
+		   2) The next pipe is right after the current one, i.e. empty cell.
+		   For case 1, we skip to the end of line; for case 2 we just continue.
+		*/
+		if (len == 0 && i < size && data[i] != '|')
+			len = size - i;
+		i += len;
 
 		cell_end = i - 1;
 
@@ -2751,6 +2804,10 @@ hoedown_document_new(
 
 	memset(doc->active_char, 0x0, 256);
 
+	if (extensions & HOEDOWN_EXT_UNDERLINE && doc->md.underline) {
+		doc->active_char['_'] = MD_CHAR_EMPHASIS;
+	}
+
 	if (doc->md.emphasis || doc->md.double_emphasis || doc->md.triple_emphasis) {
 		doc->active_char['*'] = MD_CHAR_EMPHASIS;
 		doc->active_char['_'] = MD_CHAR_EMPHASIS;
@@ -2766,8 +2823,10 @@ hoedown_document_new(
 	if (doc->md.linebreak)
 		doc->active_char['\n'] = MD_CHAR_LINEBREAK;
 
-	if (doc->md.image || doc->md.link)
+	if (doc->md.image || doc->md.link || doc->md.footnotes || doc->md.footnote_ref) {
 		doc->active_char['['] = MD_CHAR_LINK;
+		doc->active_char['!'] = MD_CHAR_IMAGE;
+	}
 
 	doc->active_char['<'] = MD_CHAR_LANGLE;
 	doc->active_char['\\'] = MD_CHAR_ESCAPE;

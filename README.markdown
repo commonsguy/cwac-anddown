@@ -34,16 +34,16 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:anddown:0.2.+'
+    compile 'com.commonsware.cwac:anddown:0.3.0'
 }
 ```
 
 Or, if you cannot use SSL, use `http://repo.commonsware.com` for the repository
 URL.
 
-The AAR artifact contains compiled binaries for ARM,
-ARM-v7a, x86, x86_64, and ARM64-v8a so you do not need your own copy of the NDK, unless
-you need a MIPS edition.
+The AAR artifact contains compiled binaries for all CPU architectures, so you do
+not need the NDK to use the library. You will need it if you want to build the
+library from source code.
 
 Usage
 -----
@@ -52,11 +52,38 @@ Create an instance of `com.commonsware.cwac.anddown.AndDown`, then call
 a `String` containing your Markdown source. This method returns a `String`
 containing HTML generated from that source.
 
+```java
+AndDown andDown=new AndDown();
+
+String result=andDown.markdownToHtml("Hello, world");
+```
+
+There is also a three-parameter version of `markdownToHtml()`, taking a pair
+of `int` values after the Markdown. The first represents a bitfield of "extensions"
+that hoedown offers; the second represents a bitfield of "flags" to the HTML
+generator in hoedown.
+
+```java
+AndDown andDown=new AndDown();
+
+String result=andDown.markdownToHtml("This \"contains\" a quote", AndDown.HOEDOWN_EXT_QUOTE, 0);
+```
+
+The [AndDown source](https://github.com/commonsguy/cwac-anddown/blob/master/anddown/src/com/commonsware/cwac/anddown/AndDown.java)
+shows the available values for the extensions and flags. In terms of what
+they mean... hoedown does not really document them. YMMV.
+
 And, that's pretty much it, at least at this time.
 
 There is no statefulness in the `AndDown` object. It should be reusable
 without having to create a fresh instance each time. It might even
 be thread-safe, though this has not been tested.
+
+Upgrading
+---------
+Upgrading to v0.3.0 from earlier versions should work without changes, except
+that the `minSdkVersion` of the library is now 8 instead of 7. If you are
+still supporting API Level 7, you are a saint, insane, or possibly both.
 
 Limitations
 -----------
@@ -82,13 +109,12 @@ Dependencies
 This project has no dependencies. This repository includes a copy of the
 relevant files from the hoedown project.
 
-This project should work on API Level 7 and higher &mdash; please report
+This project should work on API Level 8 and higher &mdash; please report
 bugs if you find otherwise.
 
 Version
 -------
-This is version v0.2.4 of this module, which means it is...
-well... it is what it is.
+The latest version of this library is **v0.3.0**. Um, yay?
 
 Demo
 ----
@@ -135,6 +161,7 @@ Do not ask for help via social media.
 
 Release Notes
 -------------
+- v0.3.0: reorganized code to Android Studio-standard structure, added stub test suite, exposed hoedown's "extensions" and "flags"
 - v0.2.4: added 64-bit x86 and ARM support
 - v0.2.3: better `Android.mk`, updated to `hoedown` 3.0.1
 - v0.2.2: updated for Android Studio 1.0 and new AAR publishing system

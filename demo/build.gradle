@@ -8,12 +8,17 @@ repositories {
 
 dependencies {
     debugCompile project(':anddown')
-    releaseCompile 'com.commonsware.cwac:anddown:0.2.+'
+    releaseCompile 'com.commonsware.cwac:anddown:0.3.+'
 }
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 23
+    }
 
     splits {
         abi {

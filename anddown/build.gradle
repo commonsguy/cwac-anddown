@@ -1,13 +1,22 @@
 apply plugin: 'com.android.library'
 
+dependencies {
+    androidTestCompile 'com.android.support.test:rules:0.5'
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
 
     defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 23
+
+        testApplicationId "com.commonsware.cwac.anddown.test"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
         ndk {
             moduleName "anddown"
-            abiFilter "armeabi armeabi-v7a x86 x86_64 arm64-v8a"
         }
     }
 
@@ -17,6 +26,27 @@ android {
 }
 
 if (project.hasProperty('PUBLISH_GROUP_ID')) {
+    task sourcesJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    task javadoc(type: Javadoc) {
+        failOnError  false
+        source = android.sourceSets.main.java.sourceFiles
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
     apply plugin: 'maven'
 
     uploadArchives {

@@ -8,12 +8,12 @@ repositories {
 
 dependencies {
     debugCompile project(':anddown')
-    releaseCompile 'com.commonsware.cwac:anddown:0.3.+'
+    releaseCompile 'com.commonsware.cwac:anddown:0.4.0'
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         minSdkVersion 8

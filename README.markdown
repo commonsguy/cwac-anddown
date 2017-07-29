@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.commonsware.cwac:anddown:0.3.0'
+    compile 'com.commonsware.cwac:anddown:0.4.0'
 }
 ```
 
@@ -114,7 +114,7 @@ bugs if you find otherwise.
 
 Version
 -------
-The latest version of this library is **v0.3.0**. Um, yay?
+The latest version of this library is **v0.4.0**. Um, yay?
 
 Demo
 ----
@@ -125,6 +125,10 @@ wrapped in a `ScrollView`.
 
 Additional Documentation
 ------------------------
+[JavaDocs are available](http://javadocs.commonsware.com/cwac/anddown/index.html),
+though since the API is pretty limited, there is little information to be
+found there.
+
 [The Busy Coder's Guide to Android Development](https://commonsware.com/Android)
 contains a chapter on the NDK that includes coverage of
 this library.
@@ -161,6 +165,7 @@ Do not ask for help via social media.
 
 Release Notes
 -------------
+- v0.4.0: updated to CMake-based build
 - v0.3.0: reorganized code to Android Studio-standard structure, added stub test suite, exposed hoedown's "extensions" and "flags"
 - v0.2.4: added 64-bit x86 and ARM support
 - v0.2.3: better `Android.mk`, updated to `hoedown` 3.0.1

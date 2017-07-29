@@ -12,8 +12,8 @@ extern "C" {
  * Method:    markdown
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_commonsware_cwac_anddown_AndDown_markdown
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jstring JNICALL Java_com_commonsware_cwac_anddown_AndDown_markdownToHtml
+  (JNIEnv *, jobject, jstring, unsigned int, unsigned int);
 
 #ifdef __cplusplus
 }

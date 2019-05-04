@@ -1,19 +1,17 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 26
-
-        testApplicationId "com.commonsware.cwac.anddown.test"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion 9
+        targetSdkVersion 28
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {

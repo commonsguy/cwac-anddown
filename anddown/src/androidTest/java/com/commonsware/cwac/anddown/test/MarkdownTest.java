@@ -14,11 +14,11 @@
 
 package com.commonsware.cwac.anddown.test;
 
-import android.support.test.runner.AndroidJUnit4;
 import com.commonsware.cwac.anddown.AndDown;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public class MarkdownTest {

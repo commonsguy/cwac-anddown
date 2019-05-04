@@ -12,10 +12,11 @@ converted into HTML in about 1 millisecond.
 
 If your objective is to put the results of Markdown in a `TextView`, or something
 else in Android that understands `Spanned` objects, you are perhaps better served
-using [Bypass](https://github.com/Uncodin/bypass/blob/master/platform/android/README.md).
-That project goes straight from Markdown to a `Spanned`, bypassing HTML. However,
-if you are looking to convert Markdown to HTML to display in a `WebView`, or have
-other reasons to, um, bypass Bypass, then AndDown may be of use to you.
+using [Markwon](https://github.com/noties/Markwon).
+That project goes straight from Markdown to a `Spanned`, bypassing HTML.
+
+If you would prefer a Markdown->HTML converter that does not involve native code,
+consider [commonmark-java](https://github.com/atlassian/commonmark-java).
 
 Installation
 ------------
